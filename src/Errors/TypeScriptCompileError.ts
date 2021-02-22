@@ -18,7 +18,7 @@ export default class TypeScriptCompileError extends BaseError {
     ].join('');
 
     return new TypeScriptCompileError(message, error);
-  };
+  }
 
   constructor(message: string, options: {}) {
     super(message);

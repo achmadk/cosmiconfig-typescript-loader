@@ -19,32 +19,34 @@ A TypeScript loader for Cosmiconfig
 ## Installation
 
 ```bash
-yarn add @endemolshinegroup/cosmiconfig-typescript-loader
+yarn add cosmiconfig @endemolshinegroup/cosmiconfig-typescript-loader
 ```
+Dont forget to install `cosmiconfig` as peer dependencies.
 
 ## Usage
 
 ```typescript
-import cosmiconfig from 'cosmiconfig';
-import TypeScriptLoader from '@endemolshinegroup/cosmiconfig-typescript-loader';
+import path from 'path'
+import { cosmiconfig, cosmiconfigSync } from 'cosmiconfig';
+import typeScriptLoader from '@endemolshinegroup/cosmiconfig-typescript-loader';
 
+// via either cosmiconfigSync API
 const moduleName = 'myModuleName';
-const explorer = cosmiconfig(moduleName, {
-  searchPlaces: [
-    'package.json',
-    `.${moduleName}rc`,
-    `.${moduleName}rc.json`,
-    `.${moduleName}rc.yaml`,
-    `.${moduleName}rc.yml`,
-    `.${moduleName}rc.ts`,
-    `.${moduleName}rc.js`,
-    `${moduleName}.config.ts`,
-    `${moduleName}.config.js`,
-  ],
-  loaders: {
-    '.ts': TypeScriptLoader,
-  },
-});
+  const explorer = cosmiconfigSync(moduleName, {
+    loaders: {
+      '.ts': typeScriptLoader(),
+    },
+  }).load(path.resolve(__dirname, `${moduleName}.config.ts`)); // please use `load` instead of `search` to directly load config file
+
+// or cosmiconfig API
+(() => {
+  const moduleName = 'myModuleName';
+  const explorer = await cosmiconfig(moduleName, {
+    loaders: {
+      '.ts': typeScriptLoader(),
+    },
+  }).load(path.resolve(__dirname, `${moduleName}.config.ts`)); // please use `load` instead of `search` to directly load config file
+})()
 ```
 
 [icon-banner]: docs/assets/banner.png
